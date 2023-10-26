@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour
     private TextField m_licensePlateTextField;
     private TextField m_serviceTextField;
 
+    private Label m_dateTimeLabel;
+
     private PopupField<string> m_popUpField;
 
     private List<string> m_dropdownOptions = new List<string> { "Placa", "Nome" };
@@ -29,6 +31,8 @@ public class UIManager : MonoBehaviour
         m_licensePlateTextField = m_root.Q<TextField>("LicensePlateTextField");
         m_serviceTextField = m_root.Q<TextField>("ServiceTextField");
 
+        m_dateTimeLabel = m_root.Q<Label>("TimeLabel");
+
         m_popUpField = m_root.Q<PopupField<string>>("ConsultFilterDropdownField");
         m_popUpField.choices = m_dropdownOptions;
 
@@ -40,6 +44,11 @@ public class UIManager : MonoBehaviour
     private void OnPopupFieldValueChanged(ChangeEvent<string> e)
     {
         Debug.Log("Selected value: " + e.newValue);
+    }
+
+    private void Update()
+    {
+        m_dateTimeLabel.text = System.DateTime.Now.ToString();
     }
 
     private void OnQuitButtonClicked()

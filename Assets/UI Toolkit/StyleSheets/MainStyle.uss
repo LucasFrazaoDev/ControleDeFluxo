@@ -16,3 +16,15 @@
     color: rgb(0, 0, 0);
     font-size: 36px;
 }
+
+#SearchFilterInputField Label {
+    display: none;
+}
+
+#unity-text-input {
+    -unity-text-align: upper-left;
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 8px;
+}
