@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour
     private TextField m_consultedDateTextField;
     private TextField m_consultedServiceTextField;
 
-    private List<string> m_popupFieldOptions = new List<string> { "Placa", "Nome" };
+    private List<string> m_popupFieldOptions = new List<string> { "Nome", "Placa" };
 
     private void Awake()
     {
@@ -69,15 +69,15 @@ public class UIManager : MonoBehaviour
 
     private void OnSearchNoteButtonClicked()
     {
-        Invoice consultedInvoice = SaveSystem.Instance.GetInvoiceByName("Lucas");
-        Debug.Log(consultedInvoice);
+        string searchText = m_searchFilterTextField.value;
+        Invoice consultedInvoice = SaveSystem.Instance.GetConsultedInvoice(m_popUpField ,searchText);
+
         if (consultedInvoice != null)
         {
             m_consultedNameTextField.value = consultedInvoice.Name;
             m_consultedLicensePlateTextField.value = consultedInvoice.LicensePlate;
             Debug.Log("Achei a sua nota!!");
         }
-        Debug.Log("Busca encerrada!");
     }
 
     private void OnSaveButtonClicked()

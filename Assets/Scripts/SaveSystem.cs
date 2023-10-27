@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using System;
+using UnityEngine.UIElements;
 
 public class SaveSystem : MonoBehaviour
 {
@@ -65,21 +67,28 @@ public class SaveSystem : MonoBehaviour
         SaveNotes();
     }
 
-    public Invoice GetInvoiceByName(string name)
+    public Invoice GetConsultedInvoice(PopupField<string> popupField, string searchText)
     {
-        if (m_invoicesByName.TryGetValue(name, out Invoice invoice))
+        switch (popupField.index)
         {
-            return invoice;
+            // Search in the dictionary Key (Name)
+            case 0:
+                foreach (var pair in m_invoicesByName)
+                {
+                    if (pair.Key.StartsWith(searchText, StringComparison.OrdinalIgnoreCase))
+                        return pair.Value;
+                }
+                break;
+            // Search in the dictionary Key (License Plate)
+            case 1:
+                foreach (var pair in m_invoicesByLicensePlate)
+                {
+                    if (pair.Key.StartsWith(searchText, StringComparison.OrdinalIgnoreCase))
+                        return pair.Value;
+                }
+                break;
         }
-        return null;
-    }
 
-    public Invoice GetInvoiceByLicensePlate(string licensePlate)
-    {
-        if (m_invoicesByLicensePlate.TryGetValue(licensePlate, out Invoice invoice))
-        {
-            return invoice;
-        }
         return null;
     }
 }
