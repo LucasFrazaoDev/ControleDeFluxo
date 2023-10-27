@@ -6,7 +6,7 @@ public class SaveSystem : MonoBehaviour
 {
     public static SaveSystem Instance { get; private set; }
 
-    private string m_filePath = "notas.json";
+    private string m_filePath;
     private List<Invoice> m_invoices = new List<Invoice>();
     private Dictionary<string, Invoice> m_invoicesByName = new Dictionary<string, Invoice>();
     private Dictionary<string, Invoice> m_invoicesByLicensePlate = new Dictionary<string, Invoice>();
@@ -28,11 +28,13 @@ public class SaveSystem : MonoBehaviour
     private void Start()
     {
         LoadNotes();
+        Debug.Log(m_filePath);
     }
 
     public void SaveNotes()
     {
         string json = JsonUtility.ToJson(m_invoices);
+
         File.WriteAllText(m_filePath, json);
     }
 
@@ -66,8 +68,10 @@ public class SaveSystem : MonoBehaviour
         SaveNotes();
     }
 
-    public Invoice GetNotaPorNome(string name)
+    public Invoice GetInvoiceByName(string name)
     {
+        Debug.Log(m_invoices.Count);
+
         if (m_invoicesByName.TryGetValue(name, out Invoice invoice))
         {
             return invoice;
@@ -75,7 +79,7 @@ public class SaveSystem : MonoBehaviour
         return null;
     }
 
-    public Invoice GetNotaPorPlaca(string licensePlate)
+    public Invoice GetInvoiceByLicensePlate(string licensePlate)
     {
         if (m_invoicesByLicensePlate.TryGetValue(licensePlate, out Invoice invoice))
         {

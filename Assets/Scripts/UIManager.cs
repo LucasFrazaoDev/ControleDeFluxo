@@ -69,7 +69,15 @@ public class UIManager : MonoBehaviour
 
     private void OnSearchNoteButtonClicked()
     {
-        Debug.Log("Achei a sua nota!!");
+        Invoice consultedInvoice = SaveSystem.Instance.GetInvoiceByName("LUCAS");
+        Debug.Log(consultedInvoice);
+        if (consultedInvoice != null)
+        {
+            m_consultedNameTextField.value = consultedInvoice.Name;
+            m_consultedLicensePlateTextField.value = consultedInvoice.LicensePlate;
+            Debug.Log("Achei a sua nota!!");
+        }
+        Debug.Log("Busca encerrada!");
     }
 
     private void OnSaveButtonClicked()
