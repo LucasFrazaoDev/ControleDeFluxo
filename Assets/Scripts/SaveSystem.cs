@@ -7,7 +7,7 @@ public class SaveSystem : MonoBehaviour
     public static SaveSystem Instance { get; private set; }
 
     private string m_filePath;
-    private List<Invoice> m_invoices = new List<Invoice>();
+    private InvoiceList m_invoiceList = new InvoiceList();
     private Dictionary<string, Invoice> m_invoicesByName = new Dictionary<string, Invoice>();
     private Dictionary<string, Invoice> m_invoicesByLicensePlate = new Dictionary<string, Invoice>();
 
@@ -28,13 +28,11 @@ public class SaveSystem : MonoBehaviour
     private void Start()
     {
         LoadNotes();
-        Debug.Log(m_filePath);
     }
 
     public void SaveNotes()
     {
-        string json = JsonUtility.ToJson(m_invoices);
-
+        string json = JsonUtility.ToJson(m_invoiceList);
         File.WriteAllText(m_filePath, json);
     }
 
@@ -47,22 +45,21 @@ public class SaveSystem : MonoBehaviour
         }
 
         string json = File.ReadAllText(m_filePath);
-        m_invoices = JsonUtility.FromJson<List<Invoice>>(json);
+        m_invoiceList = JsonUtility.FromJson<InvoiceList>(json);
 
         m_invoicesByName.Clear();
         m_invoicesByLicensePlate.Clear();
 
-        foreach (var invoice in m_invoices)
+        foreach (var invoice in m_invoiceList.invoices)
         {
             m_invoicesByName[invoice.Name] = invoice;
             m_invoicesByLicensePlate[invoice.LicensePlate] = invoice;
         }
     }
 
-
     public void AddNewNote(Invoice newInvoice)
     {
-        m_invoices.Add(newInvoice);
+        m_invoiceList.invoices.Add(newInvoice);
         m_invoicesByName[newInvoice.Name] = newInvoice;
         m_invoicesByLicensePlate[newInvoice.LicensePlate] = newInvoice;
         SaveNotes();
@@ -70,8 +67,6 @@ public class SaveSystem : MonoBehaviour
 
     public Invoice GetInvoiceByName(string name)
     {
-        Debug.Log(m_invoices.Count);
-
         if (m_invoicesByName.TryGetValue(name, out Invoice invoice))
         {
             return invoice;

@@ -69,7 +69,7 @@ public class UIManager : MonoBehaviour
 
     private void OnSearchNoteButtonClicked()
     {
-        Invoice consultedInvoice = SaveSystem.Instance.GetInvoiceByName("LUCAS");
+        Invoice consultedInvoice = SaveSystem.Instance.GetInvoiceByName("Lucas");
         Debug.Log(consultedInvoice);
         if (consultedInvoice != null)
         {
@@ -90,7 +90,6 @@ public class UIManager : MonoBehaviour
         Invoice newInvoice = new Invoice(name, licensePlate, service, date);
         SaveSystem.Instance.AddNewNote(newInvoice);
         ClearTextFields();
-        Debug.Log("Nota Salva!!");
     }
 
     private void ClearTextFields()
