@@ -42,7 +42,6 @@ public class SaveSystem : MonoBehaviour
     {
         if (!File.Exists(m_filePath))
         {
-            Debug.Log("Não há nenhum arquivo salvo!");
             return;
         }
 

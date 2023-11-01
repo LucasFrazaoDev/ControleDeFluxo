@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/UI%20Toolkit/StyleSheets/MainStyle.uss?fileID=7433441132597879392&amp;guid=d27c549f2820b0e4e8f58f5ec879d6d4&amp;type=3#MainStyle" />
     <ui:VisualElement name="MainContainer" style="flex-grow: 1; flex-direction: row; background-color: rgba(50, 119, 154, 0);">
         <ui:VisualElement name="ButtonsContainer" style="flex-grow: 1; width: 30%; background-color: rgb(67, 91, 200); align-items: center; justify-content: space-around; align-self: stretch;">
-            <ui:Label tabindex="-1" text="Frazão Auto Serviços" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 48px; -unity-font-style: bold; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-bottom-width: 10px; -unity-text-align: upper-center; white-space: normal; width: 70%;" />
+            <ui:Label tabindex="-1" text="Frazão Auto Serviços" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 48px; -unity-font-style: bold; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-bottom-width: 5px; -unity-text-align: upper-center; white-space: normal; width: 70%;" />
             <ui:VisualElement name="DatePanel" style="flex-grow: 0; width: 200px; height: 120px; align-items: center; justify-content: center;">
                 <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TimeLabel" style="font-size: 30px; -unity-text-align: upper-center; -unity-font-style: bold; flex-wrap: wrap; width: 100%;" />
             </ui:VisualElement>
@@ -24,7 +24,7 @@
                 <ui:VisualElement name="FeedbackFieldContainer" style="flex-grow: 0; width: 100%; height: 70%; align-items: flex-start; justify-content: flex-start; padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px; flex-direction: row; flex-wrap: wrap;">
                     <ui:TextField picking-mode="Ignore" label="Nome:" value="José Maria da Costa" readonly="true" name="ConsultedNameTextField" style="width: 863px; font-size: 30px;" />
                     <ui:TextField picking-mode="Ignore" label="Placa:" readonly="true" name="ConsultedLicensePlateTextField" value="fasdfada" style="width: 459px; font-size: 30px;" />
-                    <ui:TextField picking-mode="Ignore" label="Data:" readonly="true" name="ConsultedDateTextField" value="asdfagadsfasf" style="width: 401px; font-size: 30px;" />
+                    <ui:TextField picking-mode="Ignore" label="Data:" readonly="true" name="ConsultedDateTextField" value="asdfagadsfasf" style="width: 468px; font-size: 30px;" />
                     <ui:TextField picking-mode="Ignore" label="Serviço:" readonly="true" value="Opa Gangam Style!" name="ConsultedServiceTextField" style="width: 935px; height: 146px; font-size: 30px;" />
                 </ui:VisualElement>
             </ui:VisualElement>

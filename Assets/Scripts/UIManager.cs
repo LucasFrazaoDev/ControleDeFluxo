@@ -49,13 +49,11 @@ public class UIManager : MonoBehaviour
         m_consultedLicensePlateTextField = m_root.Q<TextField>("ConsultedLicensePlateTextField");
         m_consultedDateTextField = m_root.Q<TextField>("ConsultedDateTextField");
         m_consultedServiceTextField = m_root.Q<TextField>("ConsultedServiceTextField");
-        
     }
 
     private void OnEnable()
     {
         m_popUpField.choices = m_popupFieldOptions;
-        m_popUpField.RegisterValueChangedCallback(OnPopupFieldValueChanged);
 
         m_quitButton.clicked += OnQuitButtonClicked;
         m_saveNoteButton.clicked += OnSaveButtonClicked;
@@ -67,17 +65,34 @@ public class UIManager : MonoBehaviour
         ClearTextFields();
     }
 
+    private void Update()
+    {
+        m_dateTimeLabel.text = System.DateTime.Now.ToString();
+    }
+
+    private void OnDisable()
+    {
+        m_quitButton.clicked -= OnQuitButtonClicked;
+        m_saveNoteButton.clicked -= OnSaveButtonClicked;
+        m_searchNoteButton.clicked -= OnSearchNoteButtonClicked;
+    }
+
     private void OnSearchNoteButtonClicked()
     {
         string searchText = m_searchFilterTextField.value;
+        if (AreFieldEmpty(searchText)) return;
+
         Invoice consultedInvoice = SaveSystem.Instance.GetConsultedInvoice(m_popUpField ,searchText);
 
         if (consultedInvoice != null)
         {
             m_consultedNameTextField.value = consultedInvoice.Name;
             m_consultedLicensePlateTextField.value = consultedInvoice.LicensePlate;
-            Debug.Log("Achei a sua nota!!");
+            m_consultedDateTextField.value = consultedInvoice.Date;
+            m_consultedServiceTextField.value = consultedInvoice.Service;
         }
+        else
+            ClearTextFields();
     }
 
     private void OnSaveButtonClicked()
@@ -86,6 +101,8 @@ public class UIManager : MonoBehaviour
         string licensePlate = m_licensePlateTextField.value;
         string service = m_serviceTextField.value;
         string date = System.DateTime.Now.ToString();
+
+        if (AreFieldsEmpty(name, licensePlate, service)) return;
 
         Invoice newInvoice = new Invoice(name, licensePlate, service, date);
         SaveSystem.Instance.AddNewNote(newInvoice);
@@ -105,15 +122,19 @@ public class UIManager : MonoBehaviour
         m_consultedServiceTextField.value = "";
     }
 
-    private void OnPopupFieldValueChanged(ChangeEvent<string> e)
+    private bool AreFieldEmpty(string searchTextValue)
     {
-        Debug.Log("Selected value: " + e.newValue);
+        return string.IsNullOrEmpty(searchTextValue);
     }
 
-    private void Update()
+    private bool AreFieldsEmpty(string nameValue, string licensePlateValue, string serviceValue)
     {
-        m_dateTimeLabel.text = System.DateTime.Now.ToString();
+        return string.IsNullOrEmpty(nameValue)
+            || string.IsNullOrEmpty(licensePlateValue)
+            || string.IsNullOrEmpty(serviceValue);
     }
+
+
 
     private void OnQuitButtonClicked()
     {
