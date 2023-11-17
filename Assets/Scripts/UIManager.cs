@@ -8,6 +8,7 @@ using UnityEditor;
 
 public class UIManager : MonoBehaviour
 {
+    // UI elements
     private VisualElement m_root;
     private VisualElement m_addInvoicePanel;
     private VisualElement m_searchInvoicePanel;
@@ -15,6 +16,8 @@ public class UIManager : MonoBehaviour
     private Button m_quitButton;
     private Button m_showAddInvoicePanelButton;
     private Button m_showSearchInvoicePanelButton;
+    private Button m_addNewInvoiceButton;
+    private Button m_searchInvoiceButton;
 
     private TextField m_nameTextField;
     private TextField m_licensePlateTextField;
@@ -25,35 +28,36 @@ public class UIManager : MonoBehaviour
     private PopupField<string> m_popUpField;
 
     private TextField m_searchFilterTextField;
-    private TextField m_consultedNameTextField;
-    private TextField m_consultedLicensePlateTextField;
-    private TextField m_consultedDateTextField;
-    private TextField m_consultedServiceTextField;
+
+    // UI Elements names
+    private const string k_addInvoicePanelName = "AddInvoicePanel";
+    private const string k_searchInvoicePanelName = "SearchInvoicePanel";
+
+    private const string k_AddInvoicePanelButtonName = "ShowSaveInvoicePanel";
+    private const string k_searchInvoicePanelButtonName = "ShowSearchInvoicePanel";
+    private const string k_quitButton = "QuitButton";
+    private const string k_addNewInvoiceButtonName = "AddNewInvoiceButton";
+    private const string k_searchInvoiceButtonName = "SearchInvoiceButton";
+
+    private const string k_nameTextFieldName = "NameTextField";
+    private const string k_serviceTextFieldName = "LicensePlateTextField";
+    private const string k_licensePlateTextFieldName = "ServiceTextField";
+    private const string k_searchFilterTextFieldName = "SearchFilterTextField";
+
+    private const string k_dateLabelName = "DateLabel";
+    private const string k_consultFilterDropdownFieldName = "ConsultFilterDropdownField";
 
     private List<string> m_popupFieldOptions = new List<string> { "Nome", "Placa" };
 
     private void Awake()
     {
-        m_root = GetComponent<UIDocument>().rootVisualElement;
-        m_addInvoicePanel = m_root.Q<VisualElement>("AddInvoicePanel");
-        m_searchInvoicePanel = m_root.Q<VisualElement>("SearchInvoicePanel");
+        GetVisualElementsReferences();
+        GetButtonsReferences();
+        GetTextFieldsReferences();
 
-        m_quitButton = m_root.Q<Button>("QuitButton");
-        m_showAddInvoicePanelButton = m_root.Q<Button>("ShowSaveInvoicePanel");
-        m_showSearchInvoicePanelButton = m_root.Q<Button>();
-        m_showSearchInvoicePanelButton = m_root.Q<Button>("ShowSearchInvoicePanel");
-        m_dateTimeLabel = m_root.Q<Label>("DateLabel");
-
-        m_nameTextField = m_root.Q<TextField>("NameTextField");
-        m_licensePlateTextField = m_root.Q<TextField>("LicensePlateTextField");
-        m_serviceTextField = m_root.Q<TextField>("ServiceTextField");
-
-        m_searchFilterTextField = m_root.Q<TextField>("SearchFilterTextField");
-        m_popUpField = m_root.Q<PopupField<string>>("ConsultFilterDropdownField");
-        m_consultedNameTextField = m_root.Q<TextField>("ConsultedNameTextField");
-        m_consultedLicensePlateTextField = m_root.Q<TextField>("ConsultedLicensePlateTextField");
-        m_consultedDateTextField = m_root.Q<TextField>("ConsultedDateTextField");
-        m_consultedServiceTextField = m_root.Q<TextField>("ConsultedServiceTextField");
+        m_dateTimeLabel = m_root.Q<Label>(k_dateLabelName);
+        m_popUpField = m_root.Q<PopupField<string>>(k_consultFilterDropdownFieldName);
+        
     }
 
     private void OnEnable()
@@ -63,6 +67,9 @@ public class UIManager : MonoBehaviour
         m_showAddInvoicePanelButton.clicked += ShowAddInvoicePanel;
         m_showSearchInvoicePanelButton.clicked += ShowSearchInvoicePanel;
         m_quitButton.clicked += OnQuitButtonClicked;
+
+        m_addNewInvoiceButton.clicked += OnSaveButtonClicked;
+        m_searchInvoiceButton.clicked += OnSearchNoteButtonClicked;
     }
 
     private void Start()
@@ -80,6 +87,34 @@ public class UIManager : MonoBehaviour
         m_quitButton.clicked -= OnQuitButtonClicked;
         m_showAddInvoicePanelButton.clicked -= ShowAddInvoicePanel;
         m_showSearchInvoicePanelButton.clicked -= ShowSearchInvoicePanel;
+        m_addNewInvoiceButton.clicked -= OnSaveButtonClicked;
+        m_searchInvoiceButton.clicked -= OnSearchNoteButtonClicked;
+    }
+
+    private void GetVisualElementsReferences()
+    {
+        m_root = GetComponent<UIDocument>().rootVisualElement;
+        m_addInvoicePanel = m_root.Q<VisualElement>(k_addInvoicePanelName);
+        m_searchInvoicePanel = m_root.Q<VisualElement>(k_searchInvoicePanelName);
+    }
+
+    private void GetButtonsReferences()
+    {
+        m_showAddInvoicePanelButton = m_root.Q<Button>(k_AddInvoicePanelButtonName);
+        m_showSearchInvoicePanelButton = m_root.Q<Button>(k_searchInvoicePanelButtonName);
+        m_quitButton = m_root.Q<Button>(k_quitButton);
+
+        m_addNewInvoiceButton = m_root.Q<Button>(k_addNewInvoiceButtonName);
+        m_searchInvoiceButton = m_root.Q<Button>(k_searchInvoiceButtonName);
+    }
+
+    private void GetTextFieldsReferences()
+    {
+        m_searchFilterTextField = m_root.Q<TextField>(k_searchFilterTextFieldName);
+
+        m_nameTextField = m_root.Q<TextField>(k_nameTextFieldName);
+        m_licensePlateTextField = m_root.Q<TextField>(k_licensePlateTextFieldName);
+        m_serviceTextField = m_root.Q<TextField>(k_serviceTextFieldName);
     }
 
     private void ShowAddInvoicePanel()
@@ -103,10 +138,10 @@ public class UIManager : MonoBehaviour
 
         if (consultedInvoice != null)
         {
-            m_consultedNameTextField.value = consultedInvoice.Name;
-            m_consultedLicensePlateTextField.value = consultedInvoice.LicensePlate;
-            m_consultedDateTextField.value = consultedInvoice.Date;
-            m_consultedServiceTextField.value = consultedInvoice.Service;
+            //m_consultedNameTextField.value = consultedInvoice.Name;
+            //m_consultedLicensePlateTextField.value = consultedInvoice.LicensePlate;
+            //m_consultedDateTextField.value = consultedInvoice.Date;
+            //m_consultedServiceTextField.value = consultedInvoice.Service;
         }
         else
             ClearTextFields();
@@ -133,10 +168,6 @@ public class UIManager : MonoBehaviour
         m_serviceTextField.value = "";
 
         m_searchFilterTextField.value = "";
-        m_consultedNameTextField.value = "";
-        m_consultedLicensePlateTextField.value = "";
-        m_consultedDateTextField.value = "";
-        m_consultedServiceTextField.value = "";
     }
 
     private bool AreFieldEmpty(string searchTextValue)
