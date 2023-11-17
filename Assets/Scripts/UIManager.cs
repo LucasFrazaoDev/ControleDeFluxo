@@ -9,10 +9,12 @@ using UnityEditor;
 public class UIManager : MonoBehaviour
 {
     private VisualElement m_root;
+    private VisualElement m_addInvoicePanel;
+    private VisualElement m_searchInvoicePanel;
 
     private Button m_quitButton;
-    private Button m_saveNoteButton;
-    private Button m_searchNoteButton;
+    private Button m_showAddInvoicePanelButton;
+    private Button m_showSearchInvoicePanelButton;
 
     private TextField m_nameTextField;
     private TextField m_licensePlateTextField;
@@ -33,11 +35,14 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         m_root = GetComponent<UIDocument>().rootVisualElement;
+        m_addInvoicePanel = m_root.Q<VisualElement>("AddInvoicePanel");
+        m_searchInvoicePanel = m_root.Q<VisualElement>("SearchInvoicePanel");
 
         m_quitButton = m_root.Q<Button>("QuitButton");
-        m_saveNoteButton = m_root.Q<Button>("AddNewNote");
-        m_searchNoteButton = m_root.Q<Button>("SearchNoteButton");
-        m_dateTimeLabel = m_root.Q<Label>("TimeLabel");
+        m_showAddInvoicePanelButton = m_root.Q<Button>("ShowSaveInvoicePanel");
+        m_showSearchInvoicePanelButton = m_root.Q<Button>();
+        m_showSearchInvoicePanelButton = m_root.Q<Button>("ShowSearchInvoicePanel");
+        m_dateTimeLabel = m_root.Q<Label>("DateLabel");
 
         m_nameTextField = m_root.Q<TextField>("NameTextField");
         m_licensePlateTextField = m_root.Q<TextField>("LicensePlateTextField");
@@ -55,14 +60,14 @@ public class UIManager : MonoBehaviour
     {
         m_popUpField.choices = m_popupFieldOptions;
 
+        m_showAddInvoicePanelButton.clicked += ShowAddInvoicePanel;
+        m_showSearchInvoicePanelButton.clicked += ShowSearchInvoicePanel;
         m_quitButton.clicked += OnQuitButtonClicked;
-        m_saveNoteButton.clicked += OnSaveButtonClicked;
-        m_searchNoteButton.clicked += OnSearchNoteButtonClicked;
     }
 
     private void Start()
     {
-        ClearTextFields();
+        //ClearTextFields();
     }
 
     private void Update()
@@ -73,8 +78,20 @@ public class UIManager : MonoBehaviour
     private void OnDisable()
     {
         m_quitButton.clicked -= OnQuitButtonClicked;
-        m_saveNoteButton.clicked -= OnSaveButtonClicked;
-        m_searchNoteButton.clicked -= OnSearchNoteButtonClicked;
+        m_showAddInvoicePanelButton.clicked -= ShowAddInvoicePanel;
+        m_showSearchInvoicePanelButton.clicked -= ShowSearchInvoicePanel;
+    }
+
+    private void ShowAddInvoicePanel()
+    {
+        m_searchInvoicePanel.style.display = DisplayStyle.None;
+        m_addInvoicePanel.style.display = DisplayStyle.Flex;
+    }
+
+    private void ShowSearchInvoicePanel()
+    {
+        m_searchInvoicePanel.style.display = DisplayStyle.Flex;
+        m_addInvoicePanel.style.display = DisplayStyle.None;
     }
 
     private void OnSearchNoteButtonClicked()

@@ -1,34 +1,34 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI%20Toolkit/StyleSheets/MainStyle.uss?fileID=7433441132597879392&amp;guid=d27c549f2820b0e4e8f58f5ec879d6d4&amp;type=3#MainStyle" />
     <ui:VisualElement name="MainContainer" style="flex-grow: 1; flex-direction: row; background-color: rgba(50, 119, 154, 0);">
-        <ui:VisualElement name="ButtonsContainer" style="flex-grow: 1; width: 30%; background-color: rgb(67, 91, 200); align-items: center; justify-content: space-around; align-self: stretch;">
-            <ui:Label tabindex="-1" text="Frazão Auto Serviços" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 48px; -unity-font-style: bold; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-bottom-width: 5px; -unity-text-align: upper-center; white-space: normal; width: 70%;" />
-            <ui:VisualElement name="DatePanel" style="flex-grow: 0; width: 200px; height: 120px; align-items: center; justify-content: center;">
-                <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TimeLabel" style="font-size: 30px; -unity-text-align: upper-center; -unity-font-style: bold; flex-wrap: wrap; width: 100%;" />
+        <ui:VisualElement name="LeftSide" style="flex-grow: 1; width: 30%; background-color: rgb(67, 91, 200); align-items: center; justify-content: space-around; align-self: stretch;">
+            <ui:VisualElement name="LogoDateContainer" style="flex-grow: 0; width: 100%; height: 50%; align-items: center; justify-content: center; border-bottom-width: 3px; border-right-width: 5px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+                <ui:Label tabindex="-1" text="LOGO" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 96px;" />
+                <ui:Label tabindex="-1" text="date" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DateLabel" style="font-size: 56px;" />
             </ui:VisualElement>
-            <ui:Button text="Sair" parse-escape-sequences="true" display-tooltip-when-elided="true" name="QuitButton" style="align-self: center; justify-content: flex-start; bottom: auto; top: -75px; font-size: 36px; background-color: rgb(0, 0, 0); color: rgb(241, 241, 241);" />
+            <ui:VisualElement name="ButtonsContainer" style="flex-grow: 1; width: 100%; height: 50%; border-right-width: 3px; border-top-width: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); align-items: center; justify-content: center;">
+                <ui:Button text="Adicionar nota" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ShowSaveInvoicePanel" class="buttonControllerBase" style="bottom: 15px;" />
+                <ui:Button text="Consultar nota" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ShowSearchInvoicePanel" class="buttonControllerBase" />
+                <ui:Button text="Fechar" parse-escape-sequences="true" display-tooltip-when-elided="true" name="QuitButton" class="buttonControllerBase" style="top: 50px;" />
+            </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="PanelsContainer" style="flex-grow: 1; width: 70%; background-color: rgb(180, 76, 76); justify-content: space-around; align-items: center;">
-            <ui:VisualElement name="NewNotePanel" style="flex-grow: 0; width: 75%; height: 40%; background-color: rgb(202, 197, 96); border-top-left-radius: 25px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; border-bottom-left-radius: 25px; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; align-items: center;">
+        <ui:VisualElement name="PanelsContainer" style="flex-grow: 1; width: 70%; background-color: rgb(180, 76, 76); justify-content: space-around; align-items: center; position: relative;">
+            <ui:VisualElement name="AddInvoicePanel" style="flex-grow: 0; width: 75%; height: 40%; background-color: rgb(202, 197, 96); border-top-left-radius: 25px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; border-bottom-left-radius: 25px; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; align-items: center; position: relative; display: flex;">
                 <ui:TextField picking-mode="Ignore" label="Nome:" name="NameTextField" focusable="true" readonly="false" value="Oxe WTF" style="height: 10%; width: 85%; margin-top: 12px; margin-bottom: 6px; font-size: 30px;" />
                 <ui:TextField picking-mode="Ignore" label="Placa:" name="LicensePlateTextField" value="asdfasda" style="height: 10%; width: 85%; align-self: center; transform-origin: center; font-size: 30px;" />
                 <ui:TextField picking-mode="Ignore" label="Serviço:" name="ServiceTextField" value="Teste" style="width: 85%; height: 50%; padding-top: 15px; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 30px;" />
                 <ui:Button text="Salvar nota" parse-escape-sequences="true" display-tooltip-when-elided="true" name="AddNewNote" style="font-size: 24px; align-self: flex-end; color: rgb(255, 255, 255); background-color: rgb(0, 0, 0); top: 25px; bottom: auto; right: 25px;" />
             </ui:VisualElement>
-            <ui:VisualElement name="ConsultNotePanel" style="flex-grow: 0; width: 75%; height: 40%; background-color: rgb(202, 197, 96); border-top-left-radius: 25px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; border-bottom-left-radius: 25px; flex-direction: column; align-items: flex-start;">
-                <ui:VisualElement name="SearchFieldContainer" style="flex-grow: 0; flex-direction: row; width: 100%; height: 20%; align-items: center; justify-content: center;">
-                    <ui:DropdownField label="Buscar por" index="0" choices="Placa" name="ConsultFilterDropdownField" style="width: 367px; font-size: 30px; -unity-text-align: middle-center;" />
-                    <ui:TextField picking-mode="Ignore" label="Text Field" name="SearchFilterTextField" style="scale: 1 1; height: 55px; width: 305px; font-size: 30px;" />
-                    <ui:Button text="Pesquisar" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SearchNoteButton" style="height: 55px; width: 125px; font-size: 24px; background-color: rgb(0, 0, 0); color: rgb(255, 255, 255);" />
+            <ui:VisualElement name="SearchInvoicePanel" style="flex-grow: 1; width: 100%; height: 100%; position: relative; align-items: center; justify-content: space-around; display: none;">
+                <ui:VisualElement name="ConsultNotePanel" style="flex-grow: 0; width: 65%; height: 10%; background-color: rgb(202, 197, 96); border-top-left-radius: 25px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; border-bottom-left-radius: 25px; flex-direction: column; align-items: center; justify-content: center;">
+                    <ui:VisualElement name="SearchFieldContainer" style="flex-grow: 0; flex-direction: row; width: 100%; height: auto; align-items: center; justify-content: center;">
+                        <ui:DropdownField label="Buscar por" index="0" choices="Placa" name="ConsultFilterDropdownField" style="width: 367px; font-size: 30px; -unity-text-align: middle-center;" />
+                        <ui:TextField picking-mode="Ignore" label="Text Field" name="SearchFilterTextField" style="scale: 1 1; height: 55px; width: 305px; font-size: 30px;" />
+                        <ui:Button text="Pesquisar" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SearchNoteButton" style="height: 55px; width: 125px; font-size: 24px; background-color: rgb(0, 0, 0); color: rgb(255, 255, 255);" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="FeedbackFieldContainer" style="flex-grow: 0; width: 100%; height: 70%; align-items: flex-start; justify-content: flex-start; padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px; flex-direction: row; flex-wrap: wrap;">
-                    <ui:TextField picking-mode="Ignore" label="Nome:" value="José Maria da Costa" readonly="true" name="ConsultedNameTextField" style="width: 863px; font-size: 30px;" />
-                    <ui:TextField picking-mode="Ignore" label="Placa:" readonly="true" name="ConsultedLicensePlateTextField" value="fasdfada" style="width: 459px; font-size: 30px;" />
-                    <ui:TextField picking-mode="Ignore" label="Data:" readonly="true" name="ConsultedDateTextField" value="asdfagadsfasf" style="width: 468px; font-size: 30px;" />
-                    <ui:TextField picking-mode="Ignore" label="Serviço:" readonly="true" value="Opa Gangam Style!" name="ConsultedServiceTextField" style="width: 935px; height: 146px; font-size: 30px;" />
-                </ui:VisualElement>
+                <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" style="width: 70%; height: 70%; background-color: rgb(107, 233, 112);" />
             </ui:VisualElement>
-            <ui:Label tabindex="-1" text="V_1.0.2" parse-escape-sequences="true" display-tooltip-when-elided="true" name="AppVersionLabel" style="font-size: 36px; align-self: flex-end; top: auto; bottom: auto; left: auto; right: auto; -unity-font-style: bold;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
