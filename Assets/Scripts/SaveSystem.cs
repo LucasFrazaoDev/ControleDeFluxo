@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using UnityEngine.UIElements;
+using System.Linq;
 
 public class SaveSystem : MonoBehaviour
 {
@@ -66,28 +67,32 @@ public class SaveSystem : MonoBehaviour
         SaveNotes();
     }
 
-    public Invoice GetConsultedInvoice(PopupField<string> popupField, string searchText)
+    public List<Invoice> GetConsultedInvoices(PopupField<string> popupField, string searchText)
     {
+        List<Invoice> consultedInvoices = new List<Invoice>();
+
         switch (popupField.index)
         {
-            // Search in the dictionary Key (Name)
+            // Search in the list for Name
             case 0:
-                foreach (var pair in m_invoicesByName)
-                {
-                    if (pair.Key.StartsWith(searchText, StringComparison.OrdinalIgnoreCase))
-                        return pair.Value;
-                }
+                consultedInvoices = m_invoiceList.invoices
+                    .Where(invoice => invoice.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                    .OrderByDescending(invoice => invoice.Date)
+                    .ToList();
                 break;
-            // Search in the dictionary Key (License Plate)
+
+            // Search in the list for License Plate
             case 1:
-                foreach (var pair in m_invoicesByLicensePlate)
-                {
-                    if (pair.Key.StartsWith(searchText, StringComparison.OrdinalIgnoreCase))
-                        return pair.Value;
-                }
+                consultedInvoices = m_invoiceList.invoices
+                    .Where(invoice => invoice.LicensePlate.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                    .OrderByDescending(invoice => invoice.Date)
+                    .ToList();
                 break;
         }
 
-        return null;
+        Debug.Log("Notas consultadas: " + consultedInvoices.Count);
+        return consultedInvoices;
     }
+
+
 }

@@ -22,12 +22,13 @@ public class UIManager : MonoBehaviour
     private TextField m_nameTextField;
     private TextField m_licensePlateTextField;
     private TextField m_serviceTextField;
+    private TextField m_searchFilterTextField;
 
     private Label m_dateTimeLabel;
 
     private PopupField<string> m_popUpField;
 
-    private TextField m_searchFilterTextField;
+    private ScrollView m_invoicesScrollView;
 
     // UI Elements names
     private const string k_addInvoicePanelName = "AddInvoicePanel";
@@ -40,12 +41,14 @@ public class UIManager : MonoBehaviour
     private const string k_searchInvoiceButtonName = "SearchInvoiceButton";
 
     private const string k_nameTextFieldName = "NameTextField";
-    private const string k_serviceTextFieldName = "LicensePlateTextField";
-    private const string k_licensePlateTextFieldName = "ServiceTextField";
+    private const string k_licensePlateTextFieldName = "LicensePlateTextField";
+    private const string k_serviceTextFieldName = "ServiceTextField";
     private const string k_searchFilterTextFieldName = "SearchFilterTextField";
 
     private const string k_dateLabelName = "DateLabel";
     private const string k_consultFilterDropdownFieldName = "ConsultFilterDropdownField";
+
+    private const string k_invoicesScrollViewName = "InvoicesScrollView";
 
     private List<string> m_popupFieldOptions = new List<string> { "Nome", "Placa" };
 
@@ -57,7 +60,7 @@ public class UIManager : MonoBehaviour
 
         m_dateTimeLabel = m_root.Q<Label>(k_dateLabelName);
         m_popUpField = m_root.Q<PopupField<string>>(k_consultFilterDropdownFieldName);
-        
+        m_invoicesScrollView = m_root.Q<ScrollView>(k_invoicesScrollViewName);
     }
 
     private void OnEnable()
@@ -134,17 +137,31 @@ public class UIManager : MonoBehaviour
         string searchText = m_searchFilterTextField.value;
         if (AreFieldEmpty(searchText)) return;
 
-        Invoice consultedInvoice = SaveSystem.Instance.GetConsultedInvoice(m_popUpField ,searchText);
+        List<Invoice> consultedInvoices = SaveSystem.Instance.GetConsultedInvoices(m_popUpField, searchText);
 
-        if (consultedInvoice != null)
+        if (consultedInvoices.Count > 0)
         {
-            //m_consultedNameTextField.value = consultedInvoice.Name;
-            //m_consultedLicensePlateTextField.value = consultedInvoice.LicensePlate;
-            //m_consultedDateTextField.value = consultedInvoice.Date;
-            //m_consultedServiceTextField.value = consultedInvoice.Service;
+            // Faça algo com a lista de notas consultadas, por exemplo, exibir na ScrollView
+            ShowInvoicesInScrollView(consultedInvoices);
         }
         else
             ClearTextFields();
+    }
+
+    private void ShowInvoicesInScrollView(List<Invoice> consultedInvoices)
+    {
+        // Limpe os elementos existentes na ScrollView
+        m_invoicesScrollView.Clear();
+        Debug.Log(consultedInvoices.Count);
+        // Para cada nota, crie um botão horizontal na ScrollView
+        foreach (var invoice in consultedInvoices)
+        {
+            // Crie uma instância do seu elemento customizado (InvoiceVisualElement)
+            var invoiceElement = new InvoiceVisualElement(invoice);
+
+            // Adicione o elemento à ScrollView
+            m_invoicesScrollView.Add(invoiceElement);
+        }
     }
 
     private void OnSaveButtonClicked()

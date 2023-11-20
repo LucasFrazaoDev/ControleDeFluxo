@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="InvoiceElement" style="flex-direction: row; height: 10%; flex-grow: 1; border-top-left-radius: 20px; border-top-right-radius: 20px;">
+        <ui:VisualElement name="NameContainer" style="flex-grow: 1; height: 80%; width: 40%;">
+            <ui:Label tabindex="-1" text="Lucas Daniel" parse-escape-sequences="true" display-tooltip-when-elided="true" name="InvoiceNameLabel" style="-unity-text-align: middle-left; font-size: 36px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="PlateContainer" style="flex-grow: 1; height: 80%; font-size: 36px; -unity-text-align: middle-center; width: 30%;">
+            <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="InvoiceLicensePlateLabel" style="-unity-text-align: middle-left;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="DateContainer" style="flex-grow: 1; height: 80%; width: 30%;">
+            <ui:Label tabindex="-1" text="17/11/2023 14:33" parse-escape-sequences="true" display-tooltip-when-elided="true" name="InvoiceDateLabel" style="font-size: 36px; -unity-text-align: middle-left;" />
+        </ui:VisualElement>
+    </ui:Button>
+</ui:UXML>
