@@ -7,10 +7,9 @@ public class InvoiceVisualElement : VisualElement
     private Label m_invoiceLicensePlate;
     private Label m_invoiceDate;
 
-    // Construtor que carrega o layout UXML
     public InvoiceVisualElement(Invoice invoice)
     {
-        // Carregue o layout do arquivo UXML
+        // Load UXML file
         var visualTreeAsset = Resources.Load<VisualTreeAsset>("InvoiceElement");
         visualTreeAsset.CloneTree(this);
 
@@ -23,7 +22,6 @@ public class InvoiceVisualElement : VisualElement
         SetData(invoice.Date);
     }
 
-    // Métodos para configurar as informações da nota fiscal
     private void SetNome(string nome)
     {
         m_invoiceName.text = nome;

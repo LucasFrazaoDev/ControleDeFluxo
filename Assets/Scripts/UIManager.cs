@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     private VisualElement m_root;
     private VisualElement m_addInvoicePanel;
     private VisualElement m_searchInvoicePanel;
+    private VisualElement m_blockViewPanel;
 
     private Button m_quitButton;
     private Button m_showAddInvoicePanelButton;
@@ -19,10 +20,17 @@ public class UIManager : MonoBehaviour
     private Button m_addNewInvoiceButton;
     private Button m_searchInvoiceButton;
 
+    private Button m_closeDetailsInvoicePanel;
+
     private TextField m_nameTextField;
     private TextField m_licensePlateTextField;
     private TextField m_serviceTextField;
     private TextField m_searchFilterTextField;
+
+    private TextField m_nameToShowTextField;
+    private TextField m_licensePlateToShowTextField;
+    private TextField m_dateToShowTextField;
+    private TextField m_serviceToShowTextField;
 
     private Label m_dateTimeLabel;
 
@@ -33,17 +41,25 @@ public class UIManager : MonoBehaviour
     // UI Elements names
     private const string k_addInvoicePanelName = "AddInvoicePanel";
     private const string k_searchInvoicePanelName = "SearchInvoicePanel";
+    private const string k_blockViewPanelName = "BlockViewPanel";
 
     private const string k_AddInvoicePanelButtonName = "ShowSaveInvoicePanel";
     private const string k_searchInvoicePanelButtonName = "ShowSearchInvoicePanel";
+
     private const string k_quitButton = "QuitButton";
     private const string k_addNewInvoiceButtonName = "AddNewInvoiceButton";
     private const string k_searchInvoiceButtonName = "SearchInvoiceButton";
+    private const string k_closeDetaisInvoicePanelButtonName = "CloseDetailsInvoicePanelButton";
 
     private const string k_nameTextFieldName = "NameTextField";
     private const string k_licensePlateTextFieldName = "LicensePlateTextField";
     private const string k_serviceTextFieldName = "ServiceTextField";
     private const string k_searchFilterTextFieldName = "SearchFilterTextField";
+
+    private const string k_nameToShowTextFieldName = "InvoiceToShowNameTextField";
+    private const string k_licensePlateToShowTextFieldName = "InvoiceToShowPlateTextField";
+    private const string k_dateToShowTextFieldName = "InvoiceToShowDateTextField";
+    private const string k_serviceToShowTextFieldName = "InvoiceToShowServiceTextField";
 
     private const string k_dateLabelName = "DateLabel";
     private const string k_consultFilterDropdownFieldName = "ConsultFilterDropdownField";
@@ -73,6 +89,7 @@ public class UIManager : MonoBehaviour
 
         m_addNewInvoiceButton.clicked += OnSaveButtonClicked;
         m_searchInvoiceButton.clicked += OnSearchNoteButtonClicked;
+        m_closeDetailsInvoicePanel.clicked += ToggleDetailsInvoicePanel;
     }
 
     private void Start()
@@ -92,6 +109,7 @@ public class UIManager : MonoBehaviour
         m_showSearchInvoicePanelButton.clicked -= ShowSearchInvoicePanel;
         m_addNewInvoiceButton.clicked -= OnSaveButtonClicked;
         m_searchInvoiceButton.clicked -= OnSearchNoteButtonClicked;
+        m_closeDetailsInvoicePanel.clicked -= ToggleDetailsInvoicePanel;
     }
 
     private void GetVisualElementsReferences()
@@ -99,6 +117,7 @@ public class UIManager : MonoBehaviour
         m_root = GetComponent<UIDocument>().rootVisualElement;
         m_addInvoicePanel = m_root.Q<VisualElement>(k_addInvoicePanelName);
         m_searchInvoicePanel = m_root.Q<VisualElement>(k_searchInvoicePanelName);
+        m_blockViewPanel = m_root.Q<VisualElement>(k_blockViewPanelName);
     }
 
     private void GetButtonsReferences()
@@ -109,6 +128,8 @@ public class UIManager : MonoBehaviour
 
         m_addNewInvoiceButton = m_root.Q<Button>(k_addNewInvoiceButtonName);
         m_searchInvoiceButton = m_root.Q<Button>(k_searchInvoiceButtonName);
+
+        m_closeDetailsInvoicePanel = m_root.Q<Button>(k_closeDetaisInvoicePanelButtonName);
     }
 
     private void GetTextFieldsReferences()
@@ -118,6 +139,11 @@ public class UIManager : MonoBehaviour
         m_nameTextField = m_root.Q<TextField>(k_nameTextFieldName);
         m_licensePlateTextField = m_root.Q<TextField>(k_licensePlateTextFieldName);
         m_serviceTextField = m_root.Q<TextField>(k_serviceTextFieldName);
+
+        m_nameToShowTextField = m_root.Q<TextField>(k_nameToShowTextFieldName);
+        m_licensePlateToShowTextField = m_root.Q<TextField>(k_licensePlateToShowTextFieldName);
+        m_dateToShowTextField = m_root.Q<TextField>(k_dateToShowTextFieldName);
+        m_serviceToShowTextField = m_root.Q<TextField>(k_serviceToShowTextFieldName);
     }
 
     private void ShowAddInvoicePanel()
@@ -141,7 +167,6 @@ public class UIManager : MonoBehaviour
 
         if (consultedInvoices.Count > 0)
         {
-            // Faça algo com a lista de notas consultadas, por exemplo, exibir na ScrollView
             ShowInvoicesInScrollView(consultedInvoices);
         }
         else
@@ -156,12 +181,28 @@ public class UIManager : MonoBehaviour
         // Para cada nota, crie um botão horizontal na ScrollView
         foreach (var invoice in consultedInvoices)
         {
-            // Crie uma instância do seu elemento customizado (InvoiceVisualElement)
             var invoiceElement = new InvoiceVisualElement(invoice);
-
-            // Adicione o elemento à ScrollView
             m_invoicesScrollView.Add(invoiceElement);
+            invoiceElement.RegisterCallback<ClickEvent>(evt => ShowInvoiceDetails(invoice));
         }
+    }
+
+    private void ShowInvoiceDetails(Invoice invoiceToShow)
+    {
+        ToggleDetailsInvoicePanel();
+        
+        m_nameToShowTextField.value = invoiceToShow.Name;
+        m_licensePlateToShowTextField.value = invoiceToShow.LicensePlate;
+        m_dateToShowTextField.value = invoiceToShow.Date;
+        m_serviceToShowTextField.value = invoiceToShow.Service;
+    }
+
+    private void ToggleDetailsInvoicePanel()
+    {
+        if(m_blockViewPanel.style.display == DisplayStyle.None)
+            m_blockViewPanel.style.display = DisplayStyle.Flex;
+        else
+            m_blockViewPanel.style.display = DisplayStyle.None;
     }
 
     private void OnSaveButtonClicked()
