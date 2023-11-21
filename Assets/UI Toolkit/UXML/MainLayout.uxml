@@ -40,9 +40,9 @@
                     <ui:TextField picking-mode="Ignore" label="Serviço" value="filler text" name="InvoiceToShowServiceTextField" readonly="true" style="width: 1045px; height: 238px; margin-top: 25px; font-size: 26px; -unity-text-align: upper-left; white-space: normal;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="BottomButtonsCOntainer" style="flex-grow: 1; flex-direction: row; align-self: flex-end; align-items: center; justify-content: center;">
-                    <ui:Button text="Editar" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 24px;" />
-                    <ui:Button text="Salvar" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 24px;" />
-                    <ui:Button text="Deletar" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 24px; margin-left: 15px; margin-right: 15px;" />
+                    <ui:Button text="Editar" parse-escape-sequences="true" display-tooltip-when-elided="true" name="EditInvoiceButton" style="font-size: 24px;" />
+                    <ui:Button text="Salvar" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SaveChangedInvoiceButton" style="font-size: 24px; visibility: visible; display: flex;" />
+                    <ui:Button text="Deletar" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DeleteInvoiceButton" style="font-size: 24px; margin-left: 15px; margin-right: 15px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

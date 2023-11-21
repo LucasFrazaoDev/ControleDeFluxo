@@ -8,6 +8,8 @@ using UnityEditor;
 
 public class UIManager : MonoBehaviour
 {
+    private Invoice m_currentlyDisplayedInvoice;
+
     // UI elements
     private VisualElement m_root;
     private VisualElement m_addInvoicePanel;
@@ -21,6 +23,9 @@ public class UIManager : MonoBehaviour
     private Button m_searchInvoiceButton;
 
     private Button m_closeDetailsInvoicePanel;
+    private Button m_editInvoiceButton;
+    private Button m_saveChangedInvoiceButton;
+    private Button m_deleteInvoiceButton;
 
     private TextField m_nameTextField;
     private TextField m_licensePlateTextField;
@@ -46,10 +51,14 @@ public class UIManager : MonoBehaviour
     private const string k_AddInvoicePanelButtonName = "ShowSaveInvoicePanel";
     private const string k_searchInvoicePanelButtonName = "ShowSearchInvoicePanel";
 
-    private const string k_quitButton = "QuitButton";
+    private const string k_quitButtonName = "QuitButton";
     private const string k_addNewInvoiceButtonName = "AddNewInvoiceButton";
     private const string k_searchInvoiceButtonName = "SearchInvoiceButton";
+
     private const string k_closeDetaisInvoicePanelButtonName = "CloseDetailsInvoicePanelButton";
+    private const string k_editInvoiceButtonName = "EditInvoiceButton";
+    private const string k_saveChangedInvoiceButtonName = "SaveChangedInvoiceButton";
+    private const string k_deleteInvoiceButtonName = "DeleteInvoiceButton";
 
     private const string k_nameTextFieldName = "NameTextField";
     private const string k_licensePlateTextFieldName = "LicensePlateTextField";
@@ -83,18 +92,13 @@ public class UIManager : MonoBehaviour
     {
         m_popUpField.choices = m_popupFieldOptions;
 
-        m_showAddInvoicePanelButton.clicked += ShowAddInvoicePanel;
-        m_showSearchInvoicePanelButton.clicked += ShowSearchInvoicePanel;
-        m_quitButton.clicked += OnQuitButtonClicked;
-
-        m_addNewInvoiceButton.clicked += OnSaveButtonClicked;
-        m_searchInvoiceButton.clicked += OnSearchNoteButtonClicked;
-        m_closeDetailsInvoicePanel.clicked += ToggleDetailsInvoicePanel;
+        SignatureButtonClickEvents();
     }
 
     private void Start()
     {
         //ClearTextFields();
+        m_saveChangedInvoiceButton.SetEnabled(false);
     }
 
     private void Update()
@@ -104,12 +108,7 @@ public class UIManager : MonoBehaviour
 
     private void OnDisable()
     {
-        m_quitButton.clicked -= OnQuitButtonClicked;
-        m_showAddInvoicePanelButton.clicked -= ShowAddInvoicePanel;
-        m_showSearchInvoicePanelButton.clicked -= ShowSearchInvoicePanel;
-        m_addNewInvoiceButton.clicked -= OnSaveButtonClicked;
-        m_searchInvoiceButton.clicked -= OnSearchNoteButtonClicked;
-        m_closeDetailsInvoicePanel.clicked -= ToggleDetailsInvoicePanel;
+        UnsignatureButtonClickEvents();
     }
 
     private void GetVisualElementsReferences()
@@ -124,12 +123,15 @@ public class UIManager : MonoBehaviour
     {
         m_showAddInvoicePanelButton = m_root.Q<Button>(k_AddInvoicePanelButtonName);
         m_showSearchInvoicePanelButton = m_root.Q<Button>(k_searchInvoicePanelButtonName);
-        m_quitButton = m_root.Q<Button>(k_quitButton);
+        m_quitButton = m_root.Q<Button>(k_quitButtonName);
 
         m_addNewInvoiceButton = m_root.Q<Button>(k_addNewInvoiceButtonName);
         m_searchInvoiceButton = m_root.Q<Button>(k_searchInvoiceButtonName);
 
         m_closeDetailsInvoicePanel = m_root.Q<Button>(k_closeDetaisInvoicePanelButtonName);
+        m_editInvoiceButton = m_root.Q<Button>(k_editInvoiceButtonName);
+        m_saveChangedInvoiceButton = m_root.Q<Button>(k_saveChangedInvoiceButtonName);
+        m_deleteInvoiceButton = m_root.Q<Button>(k_deleteInvoiceButtonName);
     }
 
     private void GetTextFieldsReferences()
@@ -144,6 +146,31 @@ public class UIManager : MonoBehaviour
         m_licensePlateToShowTextField = m_root.Q<TextField>(k_licensePlateToShowTextFieldName);
         m_dateToShowTextField = m_root.Q<TextField>(k_dateToShowTextFieldName);
         m_serviceToShowTextField = m_root.Q<TextField>(k_serviceToShowTextFieldName);
+    }
+
+    private void SignatureButtonClickEvents()
+    {
+        m_showAddInvoicePanelButton.clicked += ShowAddInvoicePanel;
+        m_showSearchInvoicePanelButton.clicked += ShowSearchInvoicePanel;
+        m_quitButton.clicked += OnQuitButtonClicked;
+
+        m_addNewInvoiceButton.clicked += OnSaveButtonClicked;
+        m_searchInvoiceButton.clicked += OnSearchNoteButtonClicked;
+        m_closeDetailsInvoicePanel.clicked += ToggleDetailsInvoicePanel;
+        m_editInvoiceButton.clicked += EditInvoice;
+        m_saveChangedInvoiceButton.clicked += SaveChangesOfInvoice;
+    }
+
+    private void UnsignatureButtonClickEvents()
+    {
+        m_quitButton.clicked -= OnQuitButtonClicked;
+        m_showAddInvoicePanelButton.clicked -= ShowAddInvoicePanel;
+        m_showSearchInvoicePanelButton.clicked -= ShowSearchInvoicePanel;
+        m_addNewInvoiceButton.clicked -= OnSaveButtonClicked;
+        m_searchInvoiceButton.clicked -= OnSearchNoteButtonClicked;
+        m_closeDetailsInvoicePanel.clicked -= ToggleDetailsInvoicePanel;
+        m_editInvoiceButton.clicked -= EditInvoice;
+        m_saveChangedInvoiceButton.clicked += SaveChangesOfInvoice;
     }
 
     private void ShowAddInvoicePanel()
@@ -175,10 +202,8 @@ public class UIManager : MonoBehaviour
 
     private void ShowInvoicesInScrollView(List<Invoice> consultedInvoices)
     {
-        // Limpe os elementos existentes na ScrollView
-        m_invoicesScrollView.Clear();
-        Debug.Log(consultedInvoices.Count);
-        // Para cada nota, crie um botão horizontal na ScrollView
+        ClearInvoiceElements();
+
         foreach (var invoice in consultedInvoices)
         {
             var invoiceElement = new InvoiceVisualElement(invoice);
@@ -187,14 +212,33 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void ClearInvoiceElements()
+    {
+        // Remove callback and clear elements
+        foreach (var oldElement in m_invoicesScrollView.Children())
+        {
+            if (oldElement is InvoiceVisualElement invoiceElement)
+            {
+                invoiceElement.UnregisterCallback<ClickEvent>(evt => ShowInvoiceDetails(invoiceElement.Invoice));
+            }
+        }
+
+        m_invoicesScrollView.Clear();
+    }
+
     private void ShowInvoiceDetails(Invoice invoiceToShow)
     {
         ToggleDetailsInvoicePanel();
+
+        m_currentlyDisplayedInvoice = invoiceToShow;
         
         m_nameToShowTextField.value = invoiceToShow.Name;
         m_licensePlateToShowTextField.value = invoiceToShow.LicensePlate;
         m_dateToShowTextField.value = invoiceToShow.Date;
         m_serviceToShowTextField.value = invoiceToShow.Service;
+
+        SetTextFieldsReadOnly(true);
+        EnableDisableButtons(true, true, true, false);
     }
 
     private void ToggleDetailsInvoicePanel()
@@ -240,7 +284,53 @@ public class UIManager : MonoBehaviour
             || string.IsNullOrEmpty(serviceValue);
     }
 
+    private void EditInvoice()
+    {
+        SetTextFieldsReadOnly(false);
+        EnableDisableButtons(false, false, false, true);
+    }
 
+    private void SaveChangesOfInvoice()
+    {
+        if (m_currentlyDisplayedInvoice != null)
+        {
+            m_currentlyDisplayedInvoice.Name = m_nameToShowTextField.value;
+            m_currentlyDisplayedInvoice.LicensePlate = m_licensePlateToShowTextField.value;
+            m_currentlyDisplayedInvoice.Service = m_serviceToShowTextField.value;
+
+            SaveSystem.Instance.SaveNotes();
+
+            SetTextFieldsReadOnly(true);
+
+            EnableDisableButtons(true, true, true, false);
+
+            UpdateScrollView();
+        }
+    }
+
+    private void SetTextFieldsReadOnly(bool isReadOnly)
+    {
+        m_nameToShowTextField.isReadOnly = isReadOnly;
+        m_licensePlateToShowTextField.isReadOnly = isReadOnly;
+        m_serviceToShowTextField.isReadOnly = isReadOnly;
+    }
+
+    private void EnableDisableButtons(bool showDetailsButton, bool editButton, bool deleteButton, bool saveChangesButton)
+    {
+        m_closeDetailsInvoicePanel.SetEnabled(showDetailsButton);
+        m_editInvoiceButton.SetEnabled(editButton);
+        m_deleteInvoiceButton.SetEnabled(deleteButton);
+        m_saveChangedInvoiceButton.SetEnabled(saveChangesButton);
+    }
+
+    private void UpdateScrollView()
+    {
+        string searchText = m_searchFilterTextField.value;
+        List<Invoice> consultedInvoices = SaveSystem.Instance.GetConsultedInvoices(m_popUpField, searchText);
+
+        ClearInvoiceElements();
+        ShowInvoicesInScrollView(consultedInvoices);
+    }
 
     private void OnQuitButtonClicked()
     {

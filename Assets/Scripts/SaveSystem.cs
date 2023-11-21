@@ -77,7 +77,7 @@ public class SaveSystem : MonoBehaviour
             case 0:
                 consultedInvoices = m_invoiceList.invoices
                     .Where(invoice => invoice.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase))
-                    .OrderByDescending(invoice => invoice.Date)
+                    .OrderBy(invoice => invoice.Date)
                     .ToList();
                 break;
 
@@ -85,7 +85,7 @@ public class SaveSystem : MonoBehaviour
             case 1:
                 consultedInvoices = m_invoiceList.invoices
                     .Where(invoice => invoice.LicensePlate.Contains(searchText, StringComparison.OrdinalIgnoreCase))
-                    .OrderByDescending(invoice => invoice.Date)
+                    .OrderBy(invoice => invoice.Date)
                     .ToList();
                 break;
         }
