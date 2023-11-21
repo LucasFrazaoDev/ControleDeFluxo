@@ -11,8 +11,6 @@ public class SaveSystem : MonoBehaviour
 
     private string m_filePath;
     private InvoiceList m_invoiceList = new InvoiceList();
-    private Dictionary<string, Invoice> m_invoicesByName = new Dictionary<string, Invoice>();
-    private Dictionary<string, Invoice> m_invoicesByLicensePlate = new Dictionary<string, Invoice>();
 
     private void Awake()
     {
@@ -48,22 +46,11 @@ public class SaveSystem : MonoBehaviour
 
         string json = File.ReadAllText(m_filePath);
         m_invoiceList = JsonUtility.FromJson<InvoiceList>(json);
-
-        m_invoicesByName.Clear();
-        m_invoicesByLicensePlate.Clear();
-
-        foreach (var invoice in m_invoiceList.invoices)
-        {
-            m_invoicesByName[invoice.Name] = invoice;
-            m_invoicesByLicensePlate[invoice.LicensePlate] = invoice;
-        }
     }
 
     public void AddNewNote(Invoice newInvoice)
     {
         m_invoiceList.invoices.Add(newInvoice);
-        m_invoicesByName[newInvoice.Name] = newInvoice;
-        m_invoicesByLicensePlate[newInvoice.LicensePlate] = newInvoice;
         SaveNotes();
     }
 
@@ -94,5 +81,22 @@ public class SaveSystem : MonoBehaviour
         return consultedInvoices;
     }
 
+    public void DeleteInvoice(Invoice invoiceToDelete)
+    {
+        if (m_invoiceList == null)
+            LoadNotes();
+
+        if (m_invoiceList.invoices.Contains(invoiceToDelete))
+        {
+            m_invoiceList.invoices.Remove(invoiceToDelete);
+
+            //m_invoicesByName.Remove(invoiceToDelete.Name);
+            //m_invoicesByLicensePlate.Remove(invoiceToDelete.LicensePlate);
+
+            SaveNotes();
+        }
+        else
+            Debug.LogError("Tentativa de excluir uma nota que não está na lista.");
+    }
 
 }

@@ -159,6 +159,7 @@ public class UIManager : MonoBehaviour
         m_closeDetailsInvoicePanel.clicked += ToggleDetailsInvoicePanel;
         m_editInvoiceButton.clicked += EditInvoice;
         m_saveChangedInvoiceButton.clicked += SaveChangesOfInvoice;
+        m_deleteInvoiceButton.clicked += DeleteInvoice;
     }
 
     private void UnsignatureButtonClickEvents()
@@ -330,6 +331,19 @@ public class UIManager : MonoBehaviour
 
         ClearInvoiceElements();
         ShowInvoicesInScrollView(consultedInvoices);
+    }
+
+    private void DeleteInvoice()
+    {
+        if (m_currentlyDisplayedInvoice != null)
+        {
+            SaveSystem.Instance.DeleteInvoice(m_currentlyDisplayedInvoice);
+
+            ClearTextFields();
+
+            m_blockViewPanel.style.display = DisplayStyle.None;
+            UpdateScrollView();
+        }
     }
 
     private void OnQuitButtonClicked()
