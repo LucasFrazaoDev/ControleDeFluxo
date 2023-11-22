@@ -77,7 +77,6 @@ public class SaveSystem : MonoBehaviour
                 break;
         }
 
-        Debug.Log("Notas consultadas: " + consultedInvoices.Count);
         return consultedInvoices;
     }
 
@@ -95,8 +94,6 @@ public class SaveSystem : MonoBehaviour
 
             SaveNotes();
         }
-        else
-            Debug.LogError("Tentativa de excluir uma nota que não está na lista.");
     }
 
 }
